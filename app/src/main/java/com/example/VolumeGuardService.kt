@@ -152,6 +152,7 @@ class VolumeGuardService : Service() {
                 updateMediaSessionState()
                 startForegroundServiceCompat()
                 enforceLockedVolumes()
+                VolumeGuardReceiver.scheduleWatchdog(this)
             }
             ACTION_STOP -> {
                 storage.isServiceEnabled = false
@@ -174,6 +175,7 @@ class VolumeGuardService : Service() {
                 // If it's started without action, make sure we are foregrounded
                 updateMediaSessionState()
                 startForegroundServiceCompat()
+                VolumeGuardReceiver.scheduleWatchdog(this)
             }
         }
         return START_STICKY
@@ -329,6 +331,9 @@ class VolumeGuardService : Service() {
                 .setSmallIcon(android.R.drawable.ic_lock_lock)
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
+                .setShowWhen(false)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setContentIntent(openAppPendingIntent)
                 .setStyle(Notification.MediaStyle()
                     .setMediaSession(mediaSession?.sessionToken)
@@ -353,6 +358,9 @@ class VolumeGuardService : Service() {
                 .setSmallIcon(android.R.drawable.ic_lock_lock)
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
+                .setShowWhen(false)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentIntent(openAppPendingIntent)
                 .addAction(android.R.drawable.ic_media_previous, "Lower", volDownPendingIntent)
                 .addAction(android.R.drawable.ic_media_next, "Raise", volUpPendingIntent)

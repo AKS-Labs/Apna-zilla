@@ -1,3 +1,5 @@
+import java.util.Base64
+
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.compose)
@@ -21,6 +23,22 @@ android {
   }
 
   signingConfigs {
+    // Dynamically reconstruct debug.keystore if it is missing but base64 is present
+    val debugKeystore = file("${rootDir}/debug.keystore")
+    if (!debugKeystore.exists()) {
+      val base64File = file("${rootDir}/debug.keystore.base64")
+      if (base64File.exists()) {
+        try {
+          val cleanBase64 = base64File.readText().trim().replace("\\s".toRegex(), "")
+          val decoded = Base64.getDecoder().decode(cleanBase64)
+          debugKeystore.writeBytes(decoded)
+          println("Successfully restored debug.keystore from base64 source.")
+        } catch (e: Exception) {
+          println("Warning: Failed to decode debug.keystore.base64 dynamically: ${e.message}")
+        }
+      }
+    }
+
     create("release") {
       val keystorePath = System.getenv("KEYSTORE_PATH") ?: "${rootDir}/my-upload-key.jks"
       val keystoreFile = file(keystorePath)
@@ -29,16 +47,25 @@ android {
         storePassword = System.getenv("STORE_PASSWORD") ?: "android"
         keyAlias = System.getenv("KEY_ALIAS") ?: "upload"
         keyPassword = System.getenv("KEY_PASSWORD") ?: "android"
+      } else if (debugKeystore.exists()) {
+        storeFile = debugKeystore
+        storePassword = "android"
+        keyAlias = "androiddebugkey"
+        keyPassword = "android"
       } else {
-        // Fallback to debug.keystore if the specified release keystore is missing
-        storeFile = file("${rootDir}/debug.keystore")
+        // Fallback to built-in system debug keystore so the validation doesn't crash on CI/CD
+        storeFile = file(System.getProperty("user.home") + "/.android/debug.keystore")
         storePassword = "android"
         keyAlias = "androiddebugkey"
         keyPassword = "android"
       }
     }
     create("debugConfig") {
-      storeFile = file("${rootDir}/debug.keystore")
+      if (debugKeystore.exists()) {
+        storeFile = debugKeystore
+      } else {
+        storeFile = file(System.getProperty("user.home") + "/.android/debug.keystore")
+      }
       storePassword = "android"
       keyAlias = "androiddebugkey"
       keyPassword = "android"

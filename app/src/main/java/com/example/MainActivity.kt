@@ -297,48 +297,50 @@ fun MainScreen() {
             ) {
                 // Header Zone
                 item {
-                    Spacer(modifier = Modifier.height(18.dp))
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier
-                                .size(48.dp)
-                                .background(
-                                    MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f),
-                                    RoundedCornerShape(12.dp)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .size(34.dp)
+                                    .background(
+                                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
+                                        RoundedCornerShape(8.dp)
+                                    )
+                                    .border(
+                                        1.dp,
+                                        MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                                        RoundedCornerShape(8.dp)
+                                    )
+                            ) {
+                                Text(text = "🛡️", fontSize = 16.sp)
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Column {
+                                Text(
+                                    text = "VOLUME GUARD",
+                                    style = MaterialTheme.typography.titleSmall.copy(
+                                        fontWeight = FontWeight.ExtraBold,
+                                        letterSpacing = 1.5.sp,
+                                        fontSize = 14.sp
+                                    ),
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.testTag("app_title")
                                 )
-                                .border(
-                                    1.dp,
-                                    MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-                                    RoundedCornerShape(12.dp)
+                                Text(
+                                    text = "Ear protection clamp",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
                                 )
-                        ) {
-                            Text(text = "🛡️", fontSize = 24.sp)
+                            }
                         }
-                        
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Text(
-                            text = "VOLUME GUARD",
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.ExtraBold,
-                                letterSpacing = 2.5.sp,
-                                fontSize = 22.sp
-                            ),
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.testTag("app_title")
-                        )
-
-                        Text(
-                            text = "Intelligent limit clamp to protect ear & device sanity",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(top = 2.dp, start = 16.dp, end = 16.dp)
-                        )
                     }
                 }
 
@@ -427,7 +429,7 @@ fun MainScreen() {
                             actionLogs = emptyList()
                         }
                     )
-                    Spacer(modifier = Modifier.height(30.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
             }
         }
@@ -443,7 +445,6 @@ fun MasterShieldWidget(
 ) {
     val isDark = isSystemInDarkTheme()
     
-    // Smooth responsive accent color transitions based on active/inactive state
     val accentColor by animateColorAsState(
         targetValue = if (isActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
         animationSpec = tween(durationMillis = 350), label = ""
@@ -452,31 +453,20 @@ fun MasterShieldWidget(
     val cardBgColor by animateColorAsState(
         targetValue = if (isActive) {
             if (isDark) MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.12f)
-            else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f)
+            else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f)
         } else {
-            if (isDark) MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.08f)
-            else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.25f)
+            if (isDark) MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.06f)
+            else MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.15f)
         },
         animationSpec = tween(durationMillis = 350), label = ""
     )
 
-    // Dynamic rotation for security scan ring
     val infiniteTransition = rememberInfiniteTransition(label = "")
-    val scanRotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(4000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ), label = ""
-    )
-
-    // Breathing pulse scale transition for active state
     val breathingScale by infiniteTransition.animateFloat(
-        initialValue = 0.96f,
-        targetValue = 1.04f,
+        initialValue = 0.95f,
+        targetValue = 1.05f,
         animationSpec = infiniteRepeatable(
-            animation = tween(1500, easing = LinearEasing),
+            animation = tween(1200, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
         ), label = ""
     )
@@ -485,152 +475,92 @@ fun MasterShieldWidget(
         modifier = Modifier
             .fillMaxWidth()
             .testTag("master_shield_card"),
-        shape = RoundedCornerShape(28.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = cardBgColor),
-        border = BorderStroke(1.5.dp, accentColor.copy(alpha = 0.35f))
+        border = BorderStroke(1.dp, accentColor.copy(alpha = 0.3f))
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Bio-radar circular active state scanning shield element
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(100.dp)
-                    .graphicsLayer {
-                        if (isActive) {
-                            scaleX = breathingScale
-                            scaleY = breathingScale
-                        }
-                    }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
             ) {
-                // Background aura ring
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(accentColor.copy(alpha = 0.08f), CircleShape)
-                        .border(1.dp, accentColor.copy(alpha = 0.15f), CircleShape)
-                )
-
-                // Rotating tactical lock pointer dash arcs when active
-                if (isActive) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize(0.9f)
-                            .rotate(scanRotation)
-                            .border(
-                                width = 3.dp,
-                                brush = Brush.sweepGradient(
-                                    listOf(
-                                        accentColor,
-                                        Color.Transparent,
-                                        accentColor.copy(alpha = 0.4f),
-                                        Color.Transparent
-                                    )
-                                ),
-                                shape = CircleShape
-                            )
-                    )
-                }
-
-                // Main Core Ring
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .fillMaxSize(0.75f)
-                        .background(
-                            Brush.radialGradient(
-                                colors = listOf(
-                                    MaterialTheme.colorScheme.surface,
-                                    accentColor.copy(alpha = 0.15f)
-                                )
-                            ),
-                            CircleShape
-                        )
-                        .border(
-                            2.dp,
-                            Brush.linearGradient(listOf(accentColor, accentColor.copy(alpha = 0.3f))),
-                            CircleShape
-                        )
+                        .size(42.dp)
+                        .graphicsLayer {
+                            if (isActive) {
+                                scaleX = breathingScale
+                                scaleY = breathingScale
+                            }
+                        }
+                        .background(accentColor.copy(alpha = 0.12f), CircleShape)
+                        .border(1.dp, accentColor.copy(alpha = 0.25f), CircleShape)
                 ) {
                     Text(
                         text = if (isActive) "🛡️" else "🔌",
-                        fontSize = 32.sp
+                        fontSize = 18.sp
                     )
                 }
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            Text(
-                text = if (isActive) "ACTIVE EAR SHIELD" else "SHIELD DISARMED",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Black,
-                    letterSpacing = 1.8.sp,
-                    fontSize = 15.sp
-                ),
-                color = accentColor
-            )
-
-            Text(
-                text = if (isActive) 
-                    "Ear protection service is running. Clamping and preventing hardware spikes instantly."
-                    else "Instant clamp is offline. Volumes can skyrocket accidentally at any time.",
-                style = MaterialTheme.typography.bodySmall,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                lineHeight = 16.sp
-            )
-
-            // Prompt permission setup if missing Android 13+
-            if (!hasPermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                Button(
-                    onClick = onRequestPermission,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = MaterialTheme.colorScheme.onTertiary
-                    ),
-                    modifier = Modifier
-                        .padding(top = 10.dp)
-                        .testTag("grant_permission_button")
-                ) {
-                    Text("Grant Notification Authorization", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                
+                Spacer(modifier = Modifier.width(10.dp))
+                
+                Column {
+                    Text(
+                        text = if (isActive) "EAR SHIELD ACTIVE" else "SHIELD OFFLINE",
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.Black,
+                            letterSpacing = 1.2.sp
+                        ),
+                        color = accentColor
+                    )
+                    
+                    Text(
+                        text = if (isActive) "Hardware spikes clamped" else "Vulnerable to audio spikes",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f)
+                    )
+                    
+                    if (!hasPermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        Text(
+                            text = "Tap to authorize notifications",
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.tertiary
+                            ),
+                            modifier = Modifier
+                                .clickable { onRequestPermission() }
+                                .padding(vertical = 2.dp)
+                                .testTag("grant_permission_button")
+                        )
+                    }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
             }
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            // Balanced tactile, modern call-to-action button
+            
             Button(
                 onClick = onToggle,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (isActive) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
                     contentColor = if (isActive) MaterialTheme.colorScheme.onError else MaterialTheme.colorScheme.onPrimary
                 ),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp, pressedElevation = 5.dp),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp, vertical = 6.dp),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
+                    .height(34.dp)
                     .testTag("service_toggle_button"),
-                shape = RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(10.dp)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = if (isActive) "DEACTIVATE PROTECTION" else "ACTIVATE EAR SHIELD",
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = 0.8.sp
-                        )
+                Text(
+                    text = if (isActive) "OFF" else "ON",
+                    style = MaterialTheme.typography.labelMedium.copy(
+                        fontWeight = FontWeight.ExtraBold
                     )
-                }
+                )
             }
         }
     }
@@ -658,21 +588,17 @@ fun CompactVolumeStreamCard(
     }
 
     val isDark = isSystemInDarkTheme()
-    
-    // Accent status color mapping
-    val statusColor = if (isLocked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
-
     val borderStrokeColor = if (isLocked) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
     } else {
-        MaterialTheme.colorScheme.outline.copy(alpha = 0.12f)
+        MaterialTheme.colorScheme.outline.copy(alpha = 0.08f)
     }
 
     val cardBg = if (isLocked) {
-        if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)
-        else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.18f)
+        if (isDark) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.15f)
+        else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.12f)
     } else {
-        if (isDark) MaterialTheme.colorScheme.surface.copy(alpha = 0.4f)
+        if (isDark) MaterialTheme.colorScheme.surface.copy(alpha = 0.25f)
         else MaterialTheme.colorScheme.surface
     }
 
@@ -681,15 +607,14 @@ fun CompactVolumeStreamCard(
             .fillMaxWidth()
             .testTag("stream_card_$streamType"),
         colors = CardDefaults.cardColors(containerColor = cardBg),
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(14.dp),
         border = BorderStroke(1.dp, borderStrokeColor)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp)
+                .padding(10.dp)
         ) {
-            // Stream meta row (Compact & legible)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -702,60 +627,47 @@ fun CompactVolumeStreamCard(
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
-                            .size(36.dp)
+                            .size(28.dp)
                             .background(
-                                if (isLocked) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
+                                if (isLocked) MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.04f),
                                 CircleShape
                             )
                     ) {
-                        Text(text = iconEmoji, fontSize = 18.sp)
+                        Text(text = iconEmoji, fontSize = 14.sp)
                     }
                     
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     
                     Column {
-                        Text(
-                            text = streamName,
-                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        
                         Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = streamName,
+                                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
                             if (isLocked) {
                                 Box(
                                     modifier = Modifier
-                                        .size(6.dp)
+                                        .size(4.dp)
                                         .background(MaterialTheme.colorScheme.primary, CircleShape)
                                 )
-                                Spacer(modifier = Modifier.width(4.dp))
+                                Spacer(modifier = Modifier.width(3.dp))
                                 Text(
-                                    text = "Locked at limit: $lockedVal",
+                                    text = "Limit: $lockedVal",
                                     style = MaterialTheme.typography.labelSmall,
                                     color = MaterialTheme.colorScheme.primary,
                                     fontWeight = FontWeight.Bold
-                                )
-                            } else {
-                                Box(
-                                    modifier = Modifier
-                                        .size(6.dp)
-                                        .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.4f), CircleShape)
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(
-                                    text = "Float volume limit",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f)
                                 )
                             }
                         }
                     }
                 }
                 
-                // Volume units read-out
                 Text(
                     text = "$currentVolume / $maxVolume",
-                    style = MaterialTheme.typography.bodySmall.copy(
+                    style = MaterialTheme.typography.labelSmall.copy(
                         fontFamily = FontFamily.Monospace,
                         fontWeight = FontWeight.Bold
                     ),
@@ -763,50 +675,41 @@ fun CompactVolumeStreamCard(
                 )
             }
 
-            Spacer(modifier = Modifier.height(6.dp))
-
-            // Controller elements Row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Beautiful fluid Volume Track Slider
                 Slider(
                     value = currentVolume.toFloat(),
                     onValueChange = { onVolumeChange(it.toInt()) },
                     valueRange = 0f..maxVolume.toFloat(),
                     modifier = Modifier
                         .weight(1f)
-                        .padding(end = 10.dp)
+                        .height(28.dp)
+                        .padding(end = 8.dp)
                         .testTag("slider_$streamType"),
                     colors = SliderDefaults.colors(
                         activeTrackColor = if (isLocked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary,
-                        inactiveTrackColor = if (isLocked) MaterialTheme.colorScheme.primary.copy(alpha = 0.24f) else MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f),
+                        inactiveTrackColor = if (isLocked) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f) else MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f),
                         thumbColor = if (isLocked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
                     )
                 )
 
-                // High-End quick lock interactive capsule button
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .size(38.dp)
+                        .size(30.dp)
                         .clip(CircleShape)
                         .background(
                             if (isLocked) MaterialTheme.colorScheme.primary 
-                            else MaterialTheme.colorScheme.surfaceVariant
-                        )
-                        .border(
-                            1.dp,
-                            if (isLocked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
-                            CircleShape
+                            else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                         )
                         .clickable { onLockToggle() }
                         .testTag("lock_toggle_$streamType")
                 ) {
                     Text(
                         text = if (isLocked) "🔒" else "🔓",
-                        fontSize = 15.sp,
+                        fontSize = 12.sp,
                         color = if (isLocked) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -824,66 +727,57 @@ fun DefectSimulatorCard(
         modifier = Modifier
             .fillMaxWidth()
             .testTag("defect_simulator_card"),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f)
         ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.06f))
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp)
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.weight(1f)
             ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(32.dp)
-                        .background(MaterialTheme.colorScheme.error.copy(alpha = 0.1f), CircleShape)
-                ) {
-                    Text("💡", fontSize = 16.sp)
-                }
-                
-                Spacer(modifier = Modifier.width(10.dp))
-                
+                Text("🧪", fontSize = 16.sp)
+                Spacer(modifier = Modifier.width(8.dp))
                 Column {
                     Text(
-                        text = "Ear Safety Test Laboratory",
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                        text = "Safety Spike Simulator",
+                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "Verify clamp action under sudden audio spikes.",
                         style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                     )
                 }
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
+            
             OutlinedButton(
                 onClick = onSimulate,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(42.dp)
+                    .height(30.dp)
                     .testTag("simulate_spike_button"),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp, vertical = 2.dp),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = if (isGuarded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    contentColor = if (isGuarded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
                 ),
                 border = BorderStroke(
-                    1.2.dp, 
-                    if (isGuarded) MaterialTheme.colorScheme.primary.copy(alpha = 0.5f) else MaterialTheme.colorScheme.outlineVariant
+                    1.dp, 
+                    if (isGuarded) MaterialTheme.colorScheme.primary.copy(alpha = 0.4f) else MaterialTheme.colorScheme.outlineVariant
                 ),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(8.dp)
             ) {
                 Text(
-                    text = "🚨 SIMULATE SUDDEN MAX VOLUME SPIKE", 
-                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Black)
+                    text = "TEST SPIKE", 
+                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Black)
                 )
             }
         }
@@ -898,11 +792,10 @@ fun InterceptionLogsConsoleCard(
     var isExpanded by remember { mutableStateOf(false) }
     val isDark = isSystemInDarkTheme()
 
-    // Dynamic, responsive theme terminal styling
     val containerBg = if (isDark) {
         Color(0xFF14121E)
     } else {
-        Color(0xFF262431) // Keep console beautifully dark for rich contrast and readable CLI logs in both themes
+        Color(0xFF262431)
     }
 
     Card(
@@ -910,14 +803,14 @@ fun InterceptionLogsConsoleCard(
             .fillMaxWidth()
             .testTag("logs_console_card")
             .animateContentSize(),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = containerBg),
         border = BorderStroke(1.dp, Color(0xFF4AF626).copy(alpha = 0.15f))
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(14.dp)
+                .padding(10.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -928,11 +821,11 @@ fun InterceptionLogsConsoleCard(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.clickable { isExpanded = !isExpanded }
                 ) {
-                    Text("📟", fontSize = 16.sp, modifier = Modifier.padding(end = 6.dp))
+                    Text("📟", fontSize = 14.sp, modifier = Modifier.padding(end = 6.dp))
                     Text(
                         text = "GUARD CONSOLE",
-                        color = Color(0xFF4AF626), // Retrotech phosphorescent light green
-                        style = MaterialTheme.typography.bodyMedium.copy(
+                        color = Color(0xFF4AF626),
+                        style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.Black,
                             fontFamily = FontFamily.Monospace,
                             letterSpacing = 1.2.sp
@@ -969,14 +862,14 @@ fun InterceptionLogsConsoleCard(
                 exit = fadeOut() + shrinkVertically()
             ) {
                 Column {
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(120.dp)
-                            .background(Color(0xFF0C0913), RoundedCornerShape(10.dp))
-                            .padding(8.dp)
+                            .height(90.dp)
+                            .background(Color(0xFF0C0913), RoundedCornerShape(8.dp))
+                            .padding(6.dp)
                     ) {
                         if (logs.isEmpty()) {
                             Column(
@@ -985,12 +878,12 @@ fun InterceptionLogsConsoleCard(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
-                                    text = "Shield online. Waiting for spike clamp signals...",
+                                    text = "Console ready. Waiting for clamps...",
                                     color = Color.Gray.copy(alpha = 0.8f),
                                     style = MaterialTheme.typography.bodySmall.copy(
                                         fontFamily = FontFamily.Monospace,
                                         textAlign = TextAlign.Center,
-                                        fontSize = 11.sp
+                                        fontSize = 10.sp
                                     ),
                                     modifier = Modifier.padding(horizontal = 8.dp)
                                 )
@@ -998,7 +891,7 @@ fun InterceptionLogsConsoleCard(
                         } else {
                             LazyColumn(
                                 modifier = Modifier.fillMaxSize(),
-                                verticalArrangement = Arrangement.spacedBy(4.dp)
+                                verticalArrangement = Arrangement.spacedBy(2.dp)
                             ) {
                                 items(logs) { log ->
                                     Text(
@@ -1006,8 +899,8 @@ fun InterceptionLogsConsoleCard(
                                         color = Color(0xFF9EFF8B),
                                         style = MaterialTheme.typography.labelSmall.copy(
                                             fontFamily = FontFamily.Monospace,
-                                            fontSize = 10.sp,
-                                            lineHeight = 14.sp
+                                            fontSize = 9.sp,
+                                            lineHeight = 12.sp
                                         )
                                     )
                                 }
@@ -1019,4 +912,5 @@ fun InterceptionLogsConsoleCard(
         }
     }
 }
+
 

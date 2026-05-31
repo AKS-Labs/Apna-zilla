@@ -29,32 +29,19 @@ jobs:
     - name: Prepare Keystore Signing Configurations
       env:
         KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
-        STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
-        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
         if [ -n "$KEYSTORE_BASE64" ]; then
           echo "Decoding production keystore from GitHub Secrets..."
           echo "$KEYSTORE_BASE64" | base64 --decode > my-upload-key.jks
         else
-          echo "No KEYSTORE_BASE64 secret found. Auto-generating a temporary self-signed key to ensure the compile finishes..."
-          keytool -genkey -v -keystore my-upload-key.jks \
-            -alias upload \
-            -keyalg RSA \
-            -keysize 2048 \
-            -validity 10000 \
-            -storepass "${STORE_PASSWORD:-temporarypassword}" \
-            -keypass "${KEY_PASSWORD:-temporarypassword}" \
-            -dname "CN=VolumeGuard, OU=Builder, O=AIStudio, L=Build, S=CA, C=US"
-          
-          # Export transient passwords to use for gradle task
-          echo "STORE_PASSWORD=${STORE_PASSWORD:-temporarypassword}" >> $GITHUB_ENV
-          echo "KEY_PASSWORD=${KEY_PASSWORD:-temporarypassword}" >> $GITHUB_ENV
+          echo "No KEYSTORE_BASE64 secret found. Falling back to debug.keystore signing dynamically in build.gradle.kts..."
         fi
 
     - name: Build with Gradle
       env:
-        STORE_PASSWORD: ${{ secrets.STORE_PASSWORD || env.STORE_PASSWORD }}
-        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD || env.KEY_PASSWORD }}
+        STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         KEYSTORE_PATH: my-upload-key.jks
       run: |
         if [ -f "./gradlew" ]; then

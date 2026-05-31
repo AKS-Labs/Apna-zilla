@@ -1,0 +1,6 @@
+{
+  "name": "Volume Guard",
+  "description": "A clever Material 3 app that locks and locks down volume levels to protect your ears from malfunctioning or broken volume keys.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

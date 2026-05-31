@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Outer Shield Glow Shadow -->
+    <path
+        android:fillColor="#1A8A2BE2"
+        android:pathData="M 54,18 L 84,27 L 84,54 C 84,75 70,89 54,94 C 38,89 24,75 24,54 L 24,27 Z" />
+        
+    <!-- Shield Border Outline -->
+    <path
+        android:strokeColor="#A060FF"
+        android:strokeWidth="3.5"
+        android:fillColor="#300F5E"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M 54,22 L 80,30 L 80,54 C 80,72 68,84 54,88 C 40,84 28,72 28,54 L 28,30 Z" />
+
+    <!-- Protected Lock Body in Center -->
+    <path
+        android:fillColor="#4AF626"
+        android:pathData="M 44,52 c -2,0 -3.5,1.5 -3.5,3.5 L 40.5,70 c 0,2 1.5,3.5 3.5,3.5 L 64,73.5 c 2,0 3.5,-1.5 3.5,-3.5 L 67.5,55.5 c 0,-2 -1.5,-3.5 -3.5,-3.5 Z" />
+
+    <!-- Lock Shackle -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M 47,52 L 47,46 C 47,42 50,39 54,39 C 58,39 61,42 61,46 L 61,52" />
+
+    <!-- Sound Wave Arc Left -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M 21,44 C 18,50 18,58 21,64" />
+
+    <!-- Sound Wave Arc Right -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M 87,44 C 90,50 90,58 87,64" />
+</vector>
